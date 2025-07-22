@@ -1,6 +1,7 @@
 const express = require("express");
 const DepartementControllers = require("./controllers/DepartmentControllers");
 const EmployeeControllers = require("./controllers/EmployeeControllers");
+const AttendanceControllers = require("./controllers/AttandanceControllers");
 const app = express();
 const port = 3000;
 
@@ -27,6 +28,10 @@ app.put("/employees/:id", EmployeeControllers.updateEmployee);
 app.delete("/employees/:id", EmployeeControllers.deleteEmployee);
 
 
+// Attendance API
+app.get("/attendances", AttendanceControllers.getAttendance);
+app.post("/attendances", AttendanceControllers.createAttendance);
+app.put("/attendances/clock-out", AttendanceControllers.updateAttendance);
 
 
 app.listen(port, () => {
