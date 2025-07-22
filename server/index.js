@@ -1,5 +1,6 @@
 const express = require("express");
 const DepartementControllers = require("./controllers/DepartmentControllers");
+const EmployeeControllers = require("./controllers/EmployeeControllers");
 const app = express();
 const port = 3000;
 
@@ -17,6 +18,15 @@ app.get("/departments/:id", DepartementControllers.getDepartmentById);
 app.post("/departments", DepartementControllers.createDepartment);
 app.put("/departments/:id", DepartementControllers.updateDepartment);
 app.delete("/departments/:id", DepartementControllers.deleteDepartment);
+
+// Employee API
+app.get("/employees", EmployeeControllers.getAllEmployees);
+app.get("/employees/:id", EmployeeControllers.getEmployeeById);
+app.post("/employees", EmployeeControllers.createEmployee);
+app.put("/employees/:id", EmployeeControllers.updateEmployee);
+app.delete("/employees/:id", EmployeeControllers.deleteEmployee);
+
+
 
 
 app.listen(port, () => {
