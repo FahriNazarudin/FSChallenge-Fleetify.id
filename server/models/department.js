@@ -2,7 +2,6 @@
 const {
   Model
 } = require('sequelize');
-const { FOREIGNKEYS } = require('sequelize/lib/query-types');
 module.exports = (sequelize, DataTypes) => {
   class Department extends Model {
     /**
