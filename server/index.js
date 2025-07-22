@@ -2,6 +2,7 @@ const express = require("express");
 const DepartementControllers = require("./controllers/DepartmentControllers");
 const EmployeeControllers = require("./controllers/EmployeeControllers");
 const AttendanceControllers = require("./controllers/AttendanceControllers");
+const errorHandler = require("./middleware/errorHandler");
 const app = express();
 const port = 3000;
 
@@ -35,6 +36,8 @@ app.put("/attendances/clock-out", AttendanceControllers.updateAttendance);
 
 // Attendance History API
 app.get("/attendance-history", AttendanceControllers.getAttendanceHistory);
+
+app.use(errorHandler);
 
 app.listen(port, () => {
   console.log(`Example app listening on port http://localhost:${port}`);
