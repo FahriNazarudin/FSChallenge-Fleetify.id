@@ -1,7 +1,7 @@
 const express = require("express");
 const DepartementControllers = require("./controllers/DepartmentControllers");
 const EmployeeControllers = require("./controllers/EmployeeControllers");
-const AttendanceControllers = require("./controllers/AttandanceControllers");
+const AttendanceControllers = require("./controllers/AttendanceControllers");
 const app = express();
 const port = 3000;
 
@@ -33,6 +33,8 @@ app.get("/attendances", AttendanceControllers.getAttendance);
 app.post("/attendances", AttendanceControllers.createAttendance);
 app.put("/attendances/clock-out", AttendanceControllers.updateAttendance);
 
+// Attendance History API
+app.get("/attendance-history", AttendanceControllers.getAttendanceHistory);
 
 app.listen(port, () => {
   console.log(`Example app listening on port http://localhost:${port}`);

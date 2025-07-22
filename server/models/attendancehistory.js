@@ -11,8 +11,14 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      AttendanceHistory.belongsTo(models.Employee, {foreignKey: "employee_id"});
-      AttendanceHistory.belongsTo(models.Attendance, {foreignKey: "attendance_id"}); 
+      AttendanceHistory.belongsTo(models.Employee, {
+        foreignKey: "employee_id",
+        targetKey: "employee_id",
+      });
+      AttendanceHistory.belongsTo(models.Attendance, {
+        foreignKey: "attendance_id",
+        targetKey: "attendance_id",
+      }); 
     }
   }
   AttendanceHistory.init(
