@@ -8,23 +8,16 @@ const {
 const { calculateTimeDifference } = require("../helpers/helper");
 
 class AttendanceControllers {
-  static async getAttendance(req, res) {
+  static async getAttendance(req, res, next) {
     try {
       const attendances = await Attendance.findAll();
       return res.status(200).json(attendances);
     } catch (error) {
-      if (
-        error.name === "SequelizeValidationError" ||
-        error.name === "SequelizeUniqueConstraintError"
-      ) {
-        res.status(400).json({ message: error.errors[0].message });
-      } else {
-        res.status(500).json({ message: "Internal server error" });
-      }
+      next(error);
     }
   }
 
-  static async createAttendance(req, res) {
+  static async createAttendance(req, res, next) {
     try {
       const { employee_id } = req.body;
 
@@ -33,10 +26,7 @@ class AttendanceControllers {
       });
 
       if (!employee) {
-        return res.status(404).json({
-          message: "Employee not found",
-          employee_id: employee_id,
-        });
+        throw { name : "NotFound", message: "Employee not found" };
       }
 
       const attendance_id = `ATT-${Date.now()}`;
@@ -60,25 +50,18 @@ class AttendanceControllers {
         attendance: newAttendance,
       });
     } catch (error) {
-      if (
-        error.name === "SequelizeValidationError" ||
-        error.name === "SequelizeUniqueConstraintError"
-      ) {
-        res.status(400).json({ message: error.errors[0].message });
-      } else {
-        res.status(500).json({ message: "Internal server error" });
-      }
+      next(error);
     }
   }
 
-  static async updateAttendance(req, res) {
+  static async updateAttendance(req, res, next) {
     try {
       const { employee_id } = req.body;
       const attendance = await Attendance.findOne({
         where: { employee_id: employee_id },
       });
       if (!attendance) {
-        return res.status(404).json({ message: "Attendance not found" });
+        throw { name : "NotFound", message: "Attendance not found" }
       }
       const updatedData = await attendance.update({
         clock_out: new Date(),
@@ -97,18 +80,11 @@ class AttendanceControllers {
         attendance: updatedData,
       });
     } catch (error) {
-      if (
-        error.name === "SequelizeValidationError" ||
-        error.name === "SequelizeUniqueConstraintError"
-      ) {
-        res.status(400).json({ message: error.errors[0].message });
-      } else {
-        res.status(500).json({ message: "Internal server error" });
-      }
+      next(error);
     }
   }
 
-  static async getAttendanceHistory(req, res) {
+  static async getAttendanceHistory(req, res, next) {
     try {
       const { date, department_id } = req.query;
 
@@ -237,14 +213,7 @@ class AttendanceControllers {
         },
       });
     } catch (error) {
-      if (
-        error.name === "SequelizeValidationError" ||
-        error.name === "SequelizeUniqueConstraintError"
-      ) {
-        res.status(400).json({ message: error.errors[0].message });
-      } else {
-        res.status(500).json({ message: "Internal server error" });
-      }
+      next(error);
     }
   }
 }

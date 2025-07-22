@@ -1,7 +1,7 @@
 const { Department } = require("../models");
 
 class DepartementControllers {
-  static async getAllDepartments(req, res) {
+  static async getAllDepartments(req, res, next) {
     try {
       const departments = await Department.findAll({
         attributes: {
@@ -10,17 +10,11 @@ class DepartementControllers {
       });
       return res.status(200).json(departments);
     } catch (error) {
-      if (
-        error.name === "SequelizeValidationError" ||
-        error.name === "SequelizeUniqueConstraintError"
-      ) {
-        res.status(400).json({ message: error.errors[0].message });
-      } else {
-        res.status(500).json({ message: "Internal server error" });
-      }
+      next(error);
     }
   }
-  static async getDepartmentById(req, res) {
+
+  static async getDepartmentById(req, res, next) {
     try {
       const { id } = req.params;
       const department = await Department.findByPk(id, {
@@ -28,23 +22,17 @@ class DepartementControllers {
           exclude: ["createdAt", "updatedAt"],
         },
       });
+      
       if (!department) {
-        return res.status(404).json({ message: "Department not found" });
+        throw { name : "NotFound", message: "Department not found" };
       }
       return res.status(200).json(department);
     } catch (error) {
-      if (
-        error.name === "SequelizeValidationError" ||
-        error.name === "SequelizeUniqueConstraintError"
-      ) {
-        res.status(400).json({ message: error.errors[0].message });
-      } else {
-        res.status(500).json({ message: "Internal server error" });
-      }
+      next(error);
     }
   }
 
-  static async createDepartment(req, res) {
+  static async createDepartment(req, res, next) {
     try {
       const { department_name, max_clock_in_time, max_clock_out_time } =
         req.body;
@@ -55,24 +43,17 @@ class DepartementControllers {
       });
       return res.status(201).json(newDepartment);
     } catch (error) {
-      if (
-        error.name === "SequelizeValidationError" ||
-        error.name === "SequelizeUniqueConstraintError"
-      ) {
-        res.status(400).json({ message: error.errors[0].message });
-      } else {
-        res.status(500).json({ message: "Internal server error" });
-      }
+      next(error);
     }
   }
-  static async updateDepartment(req, res) {
+  static async updateDepartment(req, res, next) {
     try {
       const { id } = req.params;
       const { department_name, max_clock_in_time, max_clock_out_time } =
         req.body;
       const department = await Department.findByPk(id);
       if (!department) {
-        return res.status(404).json({ message: "Department not found" });
+        throw { name : "NotFound", message: "Department not found" };
       }
       const updatedData = await department.update({
         department_name,
@@ -85,35 +66,21 @@ class DepartementControllers {
         max_clock_out_time: updatedData.max_clock_out_time,
       });
     } catch (error) {
-      if (
-        error.name === "SequelizeValidationError" ||
-        error.name === "SequelizeUniqueConstraintError"
-      ) {
-        res.status(400).json({ message: error.errors[0].message });
-      } else {
-        res.status(500).json({ message: "Internal server error" });
-      }
+      next(error);
     }
   }
 
-  static async deleteDepartment(req, res) {
+  static async deleteDepartment(req, res, next) {
     try {
       const { id } = req.params;
       const department = await Department.findByPk(id);
       if (!department) {
-        return res.status(404).json({ message: "Department not found" });
+        throw { name : "NotFound" , message: "Department not found" };
       }
       await department.destroy();
       return res.status(200).json({ message: "Department was deleted" });
     } catch (error) {
-      if (
-        error.name === "SequelizeValidationError" ||
-        error.name === "SequelizeUniqueConstraintError"
-      ) {
-        res.status(400).json({ message: error.errors[0].message });
-      } else {
-        res.status(500).json({ message: "Internal server error" });
-      }
+     next(error);
     }
   }
 }
