@@ -58,17 +58,21 @@ export default function Department() {
   return (
     <div>
       <Navbar />
-      <div className="container mt-4 d-flex justify-content-end mx-3">
+      <div className="container mt-4 d-flex justify-content-end mx-3 ">
         <Button
           type="add"
           variant="warning"
           title="Create Department"
+          className="rounded-5 px-4 text-white text"
           onClick={() => navigate("/create-departments")}
         />
       </div>
       <div className="container mt-4 p-4 rounded-3">
-        <table className="table rounded-3 shadow">
-          <thead className="table-warning color-white">
+        <table
+          className="table "
+          style={{ borderRadius: "1.5rem" }}
+        >
+          <thead className="table-warning color-white ">
             <tr className="text-center">
               <th scope="col">No</th>
               <th scope="col">Name Department</th>
@@ -90,6 +94,7 @@ export default function Department() {
                       title="edit"
                       variant="warning"
                       type="button"
+                      className="rounded-5 px-4 text-white"
                       onClick={() =>
                         navigate(`/edit-departments/${department.id}`)
                       }
@@ -98,6 +103,7 @@ export default function Department() {
                       title="delete"
                       variant="danger"
                       type="button"
+                      className="rounded-5 px-4 text-white"
                       onClick={() => handleDelete(department.id)}
                     />
                   </div>

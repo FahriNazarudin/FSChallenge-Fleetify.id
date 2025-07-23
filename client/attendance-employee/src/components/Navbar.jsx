@@ -1,66 +1,104 @@
-import { Link, NavLink } from "react-router";
-
+import {  Link, NavLink, useLocation, useNavigate } from "react-router";
+import logo from "../assets/image.png";
 export default function Navbar() {
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const isActive = (path) => {
+    return location.pathname === path || location.pathname.startsWith(path);
+  };
+
   return (
-    <div>
-      <NavLink
-        style={{ color: "white",
-          textDecoration: "none"
-         }}
-        className="navbar navbar-expand-lg bg-warning "
+    <nav
+      className="container-fluid  "
+      style={{
+        backgroundColor: "rgba(80, 80, 80, 0.5)",
+      }}
+    >
+      <div
+        style={{ color: "white", textDecoration: "none" }}
+        className="navbar navbar-expand-lg"
       >
-        <div className="container d-flex justify-content-center ">
-          <div className="collapse navbar-collapse d-flex justify-content-center ">
+        <div classname="container-fluid  ">
+          <Link classname="navbar-brand" />
+          <img
+            src={logo}
+            alt="Logo"
+            height="40"
+            className="d-inline-block align-text-top"
+            onClick={() => navigate("/")}
+          />
+          <Link />
+        </div>
+
+        <div className="container d-flex justify-content-end ">
+          <div className="collapse navbar-collapse d-flex justify-content-end ">
             <ul className="navbar-nav gap-3">
               <li className="nav-item ">
-                <Link
-                  className="nav-link " 
+                <NavLink
+                  className="nav-link rounded-5 p-2 "
                   aria-current="page"
                   style={{
                     color: "white",
+                    backgroundColor: isActive("/departments")
+                      ? "rgba(255, 255, 255, 0.2)"
+                      : "transparent",
+                    transition: "all 0.3s ease",
                   }}
                   to="/departments"
                 >
                   Department
-                </Link>
+                </NavLink>
               </li>
               <li className="nav-item">
-                <Link
-                  className="nav-link"
+                <NavLink
+                  className="nav-link rounded-5 p-2"
                   to="/employees"
                   style={{
                     color: "white",
+                    backgroundColor: isActive("/employees")
+                      ? "rgba(255, 255, 255, 0.2)"
+                      : "transparent",
+                    transition: "all 0.3s ease",
                   }}
                 >
                   Employee
-                </Link>
+                </NavLink>
               </li>
               <li className="nav-item">
-                <Link
-                  className="nav-link"
+                <NavLink
+                  className="nav-link rounded-5 p-2"
                   style={{
                     color: "white",
+                    backgroundColor: isActive("/attendances")
+                      ? "rgba(255, 255, 255, 0.2)"
+                      : "transparent",
+                    transition: "all 0.3s ease",
                   }}
                   to="/attendances"
                 >
                   Attendance
-                </Link>
+                </NavLink>
               </li>
               <li className="nav-item">
-                <Link
-                  className="nav-link"
+                <NavLink
+                  className="nav-link rounded-5 p-2"
                   style={{
                     color: "white",
+                    backgroundColor: isActive("/attendance-histories")
+                      ? "rgba(255, 255, 255, 0.2)"
+                      : "transparent",
+                    transition: "all 0.3s ease",
                   }}
                   to="/attendance-histories"
                 >
                   Attendace History
-                </Link>
+                </NavLink>
               </li>
             </ul>
           </div>
         </div>
-      </NavLink>
-    </div>
+      </div>
+    </nav>
   );
 }

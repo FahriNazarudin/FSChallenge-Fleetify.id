@@ -31,9 +31,9 @@ export default function AttendaceHistories() {
       // Jika hanya ada date, gunakan date tersebut
       if (filters.start_date && filters.end_date) {
         // Hapus parameter date jika ada range date
-        params.delete('date');
-        params.set('start_date', filters.start_date);
-        params.set('end_date', filters.end_date);
+        params.delete("date");
+        params.set("start_date", filters.start_date);
+        params.set("end_date", filters.end_date);
       }
 
       const response = await http({
@@ -131,8 +131,6 @@ export default function AttendaceHistories() {
   return (
     <div>
       <Navbar />
-
-
       <div className="container mt-4">
         <div className="card shadow">
           <div className="card-header bg-warning text-white">
@@ -197,7 +195,6 @@ export default function AttendaceHistories() {
                 </select>
               </div>
 
-        
               {/* Clear Button */}
               <div className="col-md-4 d-flex align-items-end">
                 <Button

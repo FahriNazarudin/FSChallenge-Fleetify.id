@@ -11,9 +11,6 @@ export default function Attendance() {
   const [departments, setDepartments] = useState([]);
 
 
-
-
-  // Fetch employees for validation
   useEffect(() => {
     fetchEmployees();
     fetchDepartments();
