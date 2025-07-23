@@ -1,24 +1,24 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
-import FormDepartment from "../components/formDepartment";
 import http from "../lib/http";
+import FormEmployee from "../components/FormEmployee";
 import Navbar from "../components/Navbar";
 
-export default function EditDepartment() {
+export default function EditEmployee() {
   const { id } = useParams();
-  const [department, setDepartment] = useState(null);
+  const [employees, setEmployees] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    async function fetchDepartment() {
+    async function fetchEmployees() {
       try {
         setLoading(true);
         const response = await http({
           method: "GET",
-          url: `/departments/${id}`,
+          url: `/employees/${id}`,
         });
-        setDepartment(response.data);
+        setEmployees(response.data);
         setError(null);
       } catch (error) {
         console.error("Error fetching department:", error);
@@ -29,7 +29,7 @@ export default function EditDepartment() {
     }
 
     if (id) {
-      fetchDepartment();
+      fetchEmployees();
     }
   }, [id]);
 
@@ -55,8 +55,7 @@ export default function EditDepartment() {
   return (
     <div>
       <Navbar />
-
-        <FormDepartment type="edit" id={id} departments={department} />
+        <FormEmployee type="edit" id={id} employees={employees} />
 
     </div>
   );

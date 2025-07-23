@@ -6,6 +6,8 @@ import CreateDepartment from "./pages/CreateDepartment";
 import EditDepartment from "./pages/EditDepartment";
 import Attendance from "./pages/Attendance";
 import AttendaceHistories from "./pages/AttendanceHistory";
+import CreateEmployee from "./pages/CreateEmployee";
+import EditEmployee from "./pages/EditEmployee";
 
 
 function App() {
@@ -14,6 +16,8 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/employees" element={<Employees />} />
+        <Route path="/create-employee" element={<CreateEmployee />} />
+        <Route path="/edit-employee/:id" element={<EditEmployee />} />
         <Route path="/departments" element={<Department />} />
         <Route path="/create-departments" element={<CreateDepartment />} />
         <Route path="/edit-departments/:id" element={<EditDepartment />} />

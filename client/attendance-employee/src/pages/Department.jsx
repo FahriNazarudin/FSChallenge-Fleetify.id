@@ -39,11 +39,7 @@ export default function Department() {
           url: `/departments/${id}`,
         });
       }
-      Swal.fire(
-        "Deleted!", 
-        "Department has been deleted", 
-        "success"
-      );
+      Swal.fire("Deleted!", "Department has been deleted", "success");
 
       fetchDepartments();
     } catch (error) {
@@ -70,9 +66,9 @@ export default function Department() {
           onClick={() => navigate("/create-departments")}
         />
       </div>
-      <div className="container mt-4 p-4 rounded-4">
+      <div className="container mt-4 p-4 rounded-3">
         <table className="table rounded-3 shadow">
-          <thead>
+          <thead className="table-warning color-white">
             <tr className="text-center">
               <th scope="col">No</th>
               <th scope="col">Name Department</th>
@@ -91,7 +87,6 @@ export default function Department() {
                 <td>
                   <div className="d-flex justify-content-center gap-2">
                     <Button
-                    style={{ color: "white" }}
                       title="edit"
                       variant="warning"
                       type="button"
