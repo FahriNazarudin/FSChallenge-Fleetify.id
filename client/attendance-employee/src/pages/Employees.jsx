@@ -7,7 +7,9 @@ import Button from "../components/Button";
 
 export default function Employees() {
   const [employees, setEmployees] = useState([]);
+  const [departments, setDepartments]   = useState([]);
   const navigate = useNavigate();
+
   async function fetchEmployees() {
     try {
       const respoense = await http({
@@ -16,6 +18,19 @@ export default function Employees() {
       });
       console.log(respoense.data);
       setEmployees(respoense.data);
+    } catch (error) {
+      console.error("Error fetching departments:", error);
+    }
+  }
+
+  async function fetchDepartments() {
+    try {
+      const response = await http({
+        method: "GET",
+        url: "/departments",
+      });
+      setDepartments(response.data);
+      console.log("Fetched departments:", response.data);
     } catch (error) {
       console.error("Error fetching departments:", error);
     }
@@ -54,7 +69,14 @@ export default function Employees() {
 
   useEffect(() => {
     fetchEmployees();
+    fetchDepartments()
   }, []);
+
+
+  const getDepartmentName = (departmentId) => {
+    const department = departments.find((dept) => dept.id === departmentId);
+    return department ? department.department_name : "Unknown Department";
+  };    
   return (
     <div>
       <Navbar />
@@ -82,7 +104,7 @@ export default function Employees() {
               <tr className="text-center">
                 <th scope="row">{i + 1}</th>
                 <td>{employee.name}</td>
-                <td>{employee.department_id}</td>
+                <td>{getDepartmentName(employee.department_id)}</td>
                 <td>{employee.address}</td>
                 <td>
                   <div className="d-flex justify-content-center gap-2">
