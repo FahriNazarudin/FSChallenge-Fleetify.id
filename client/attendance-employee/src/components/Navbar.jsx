@@ -1,18 +1,20 @@
-import { Link } from "react-router";
+import { Link, NavLink } from "react-router";
 
 export default function Navbar() {
   return (
     <div>
-      <nav
-        style={{ color: "white" }}
-        className="navbar navbar-expand-lg bg-warning"
+      <NavLink
+        style={{ color: "white",
+          textDecoration: "none"
+         }}
+        className="navbar navbar-expand-lg bg-warning "
       >
         <div className="container d-flex justify-content-center ">
           <div className="collapse navbar-collapse d-flex justify-content-center ">
-            <ul className="navbar-nav">
+            <ul className="navbar-nav gap-3">
               <li className="nav-item ">
                 <Link
-                  className="nav-link "
+                  className="nav-link " 
                   aria-current="page"
                   style={{
                     color: "white",
@@ -58,7 +60,7 @@ export default function Navbar() {
             </ul>
           </div>
         </div>
-      </nav>
+      </NavLink>
     </div>
   );
 }
