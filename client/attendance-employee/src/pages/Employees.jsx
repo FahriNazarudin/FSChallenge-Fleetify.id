@@ -85,6 +85,7 @@ export default function Employees() {
           type="add"
           variant="warning"
           title="Create Employee"
+          className="rounded-5 px-4 text-white"
           onClick={() => navigate("/create-employee")}
         />
       </div>
@@ -113,12 +114,14 @@ export default function Employees() {
                       title="edit"
                       variant="warning"
                       type="button"
+                      className="rounded-5 px-4 text-white"
                       onClick={() => navigate(`/edit-employee/${employee.id}`)}
                     />
                     <Button
                       title="delete"
                       variant="danger"
                       type="button"
+                      className="rounded-5 px-4 text-white"
                       onClick={() => handleDelete(employee.id)}
                     />
                   </div>
