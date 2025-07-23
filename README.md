@@ -2,7 +2,7 @@
 
 ### DESCRIPTION
 
-Sebuah perusahaan Multinasional memiliki jumlah karyawan diatas 50 karyawan, dan memiliki berbagai macam Divisi atau departemen didalamnya. Karena banyaknya karyawan untuk dikelola, perusahaan membutuhkan Sistem untuk Absensi guna mencatat serta mengevaluasi kedisiplinan karyawan secara sistematis.
+A Multinational company has employees and various divisions or departments within it. Due to the large number of employees to manage, the company requires an Attendance System to systematically record and evaluate employee discipline.
 
 ## TECH STACK
 
