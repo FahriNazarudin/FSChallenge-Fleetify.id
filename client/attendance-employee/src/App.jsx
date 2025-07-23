@@ -1,12 +1,27 @@
+import { BrowserRouter, Route, Routes } from "react-router";
+import Home from "./pages/Home";
+import Employees from "./pages/Employees";
+import Department from "./pages/Department";
+import CreateDepartment from "./pages/CreateDepartment";
+import EditDepartment from "./pages/EditDepartment";
+import Attendance from "./pages/Attendance";
+import AttendaceHistories from "./pages/AttendanceHistory";
+
 
 function App() {
-  
-
   return (
-    <>
-     <h1>HALO</h1>
-    </>
-  )
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/employees" element={<Employees />} />
+        <Route path="/departments" element={<Department />} />
+        <Route path="/create-departments" element={<CreateDepartment />} />
+        <Route path="/edit-departments/:id" element={<EditDepartment />} />
+        <Route path="/attendances" element={<Attendance />} />
+        <Route path="/attendance-histories" element={<AttendaceHistories />} />
+      </Routes>
+    </BrowserRouter>
+  );
 }
 
-export default App
+export default App;
