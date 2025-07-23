@@ -5,10 +5,12 @@ const AttendanceControllers = require("./controllers/AttendanceControllers");
 const errorHandler = require("./middleware/errorHandler");
 const app = express();
 const port = 3000;
+const cors = require("cors");
+
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
+app.use(cors());
 
 app.get("/", (req, res) => {
   res.send("Hello World!");
