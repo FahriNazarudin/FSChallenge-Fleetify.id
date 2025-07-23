@@ -5,7 +5,6 @@ const {
   Employee,
   Department,
 } = require("../models");
-const { calculateTimeDifference } = require("../helpers/helper");
 
 class AttendanceControllers {
   static async getAttendance(req, res, next) {
@@ -26,7 +25,7 @@ class AttendanceControllers {
       });
 
       if (!employee) {
-        throw { name : "NotFound", message: "Employee not found" };
+        throw { name: "NotFound", message: "Employee not found" };
       }
 
       const attendance_id = `ATT-${Date.now()}`;
@@ -61,7 +60,7 @@ class AttendanceControllers {
         where: { employee_id: employee_id },
       });
       if (!attendance) {
-        throw { name : "NotFound", message: "Attendance not found" }
+        throw { name: "NotFound", message: "Attendance not found" };
       }
       const updatedData = await attendance.update({
         clock_out: new Date(),
@@ -86,7 +85,7 @@ class AttendanceControllers {
 
   static async getAttendanceHistory(req, res, next) {
     try {
-      const { date, department_id } = req.query;
+      const { date, start_date, end_date, department_id } = req.query;
 
       // Inisialisasi kondisi WHERE untuk filter database
       let whereCondition = {};
@@ -98,12 +97,39 @@ class AttendanceControllers {
         endDate.setDate(endDate.getDate() + 1);
 
         whereCondition.date_attendance = {
-          [Op.gte]: startDate, 
+          [Op.gte]: startDate,
+          [Op.lt]: endDate,
+        };
+      }
+      // Filter berdasarkan range tanggal jika start_date dan end_date ada
+      else if (start_date && end_date) {
+        const startDate = new Date(start_date);
+        const endDate = new Date(end_date);
+        endDate.setDate(endDate.getDate() + 1); // Tambah 1 hari untuk include end_date
+
+        whereCondition.date_attendance = {
+          [Op.gte]: startDate,
+          [Op.lt]: endDate,
+        };
+      }
+      // Filter berdasarkan start_date saja
+      else if (start_date) {
+        const startDate = new Date(start_date);
+
+        whereCondition.date_attendance = {
+          [Op.gte]: startDate,
+        };
+      }
+      // Filter berdasarkan end_date saja
+      else if (end_date) {
+        const endDate = new Date(end_date);
+        endDate.setDate(endDate.getDate() + 1);
+
+        whereCondition.date_attendance = {
           [Op.lt]: endDate,
         };
       }
 
-      // Konfigurasi untuk JOIN table Employee dan Department
       // Mengambil data karyawan beserta informasi departemen dan waktu maksimal absen
       let includeOptions = {
         model: Employee,
@@ -126,8 +152,6 @@ class AttendanceControllers {
         includeOptions.where = { department_id: parseInt(department_id) };
       }
 
-      // Query database untuk mengambil data attendance history
-      // dengan JOIN ke table Employee dan Department
       const attendanceHistory = await AttendanceHistory.findAll({
         where: whereCondition,
         include: [includeOptions],
@@ -137,9 +161,6 @@ class AttendanceControllers {
         },
       });
 
-
-      // Ambil data karyawan yang tidak masuk (absent) hanya jika filter tanggal aktif
-      let absentEmployees = [];
       if (date) {
         // Setup range waktu untuk tanggal yang dipilih
         const startOfDay = new Date(date);
@@ -152,64 +173,17 @@ class AttendanceControllers {
         if (department_id) {
           employeeWhere.department_id = parseInt(department_id);
         }
-
-        // Ambil semua karyawan dalam department yang dipilih
-        const allEmployees = await Employee.findAll({
-          where: employeeWhere,
-          include: [
-            {
-              model: Department,
-              attributes: [
-                "id",
-                "department_name",
-                "max_clock_in_time",
-                "max_clock_out_time",
-              ],
-            },
-          ],
-          attributes: ["id", "employee_id", "name", "department_id"],
-        });
-
-        // Ambil karyawan yang sudah clock in pada tanggal tersebut
-        const clockedInEmployees = await AttendanceHistory.findAll({
-          where: {
-            date_attendance: {
-              [Op.between]: [startOfDay, endOfDay],
-            },
-            attendance_type: 1, // Hanya Clock In
-          },
-          attributes: ["employee_id"],
-        });
-
-        // Extract employee_id yang sudah clock in
-        const clockedInEmployeeIds = clockedInEmployees.map(
-          (record) => record.employee_id
-        );
-
-        // Cari karyawan yang tidak clock in (absent)
-        absentEmployees = allEmployees
-          .filter((emp) => !clockedInEmployeeIds.includes(emp.employee_id))
-          .map((employee) => ({
-            employee_id: employee.employee_id,
-            employee_name: employee.name,
-            department_name: employee.Department.department_name,
-            max_clock_in_time: employee.Department.max_clock_in_time,
-            max_clock_out_time: employee.Department.max_clock_out_time,
-            date: date,
-            status: "Absent",
-            description: "No clock in record found",
-          }));
       }
 
-      // Return response JSON dengan data attendance dan absent employees
       return res.status(200).json({
         filters: {
           date: date,
+          start_date: start_date,
+          end_date: end_date,
           department_id: department_id,
         },
         data: {
           attendance_history: attendanceHistory,
-          absent_employees: absentEmployees,
         },
       });
     } catch (error) {
